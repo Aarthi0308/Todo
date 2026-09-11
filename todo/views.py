@@ -1,10 +1,43 @@
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 from django.http import HttpResponse
 from .models import Task
 
+
 def addtask(request):
-    task=request.POST['task']
+    task = request.POST['task']
     Task.objects.create(task=task)
     return redirect('home')
 
-    
+
+def mark_as_done(request, pk):
+    task = get_object_or_404(Task, pk=pk)
+    task.is_completed = True
+    task.save()
+    return redirect('home')
+
+def delete(request,id):
+    delete=get_object_or_404(Task,id=id)
+    delete.delete()
+    return redirect('home')
+
+def mark_as_undone(request,id):
+    undone=get_object_or_404(Task,id=id)
+    undone.is_completed=False
+    undone.save()
+    return redirect('home')
+
+def edit_task(request,pk):
+    get_task1=get_object_or_404(Task,pk=pk)
+    if request.method== 'POST':
+        new_task=request.POST['task']
+        print(new_task)
+        get_task1.task=new_task
+        get_task1.save()
+        return redirect('home')
+    else:
+        context={
+            'get_task':get_task1,
+        }
+
+        
+    return render(request,'edit_task.html',context)

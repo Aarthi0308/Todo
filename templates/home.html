@@ -14,7 +14,7 @@
     
     <style>
         .form-control{
-        padding: 1.375rem .75rem !important;
+        padding: 1.3rem .75rem !important;
     }
     </style>
 </head>
@@ -22,31 +22,40 @@
     <div class="container">
         <h3 class="pt-5 text-center">Django ToDo App</h3>
         <div class="row">
-            <h4>My Day</h4>
+            <h4>Today Todo</h4>
             <p class="text-muted">{% now "jS F Y" %}</p>
-            <div class="col-md-7 col-lg-7" style="height: 450px; overflow: scroll;">
+            <div class="col-md-6 col-lg-6" style="height: 450px; overflow: scroll;">
                 <!-- List of all the tasks for the day -->
-                   {% for task in tasks1 %}
+                   {% for c in tasks1 %}
                 <div class="card m-1">
                     <div class="card-body">
-                         {{ task.task }}
+                         {{ c.task }}
                         <span style="position: relative; float: right;">
-                            <a class="btn btn-success"><i class="fa fa-check"></i> Mark as Done</a>
-                            <a class="btn btn-danger"><i class="fa fa-trash"></i></a>
-                            <a class="btn btn-primary"><i class="fa fa-pencil"></i></a>
+                            <a href="{% url 'mark_as_done' c.pk %}" class="btn btn-outline-success"><i class="fa fa-check"></i> Mark as Done</a>
+                            <a href="{% url 'delete' c.id %}" class="btn btn-outline-danger"><i class="fa fa-trash"></i> Delete</a>
+                            <a href="{% url 'edit_task' c.pk %}"  class="btn btn-outline-dark"><i class="fa fa-pencil"></i>Edit</a>
+                        
                         </span>
                     </div>
                 </div>
                   {% endfor %}
             </div>
-            <div class="col-md-5 col-lg-5">
+            <div class="col-md-6 col-lg-6" style="height: 450px; overflow: scroll;">
                 <h5>Completed Tasks</h5>
                 <!-- List of all the tasks that have completed -->
+                 {%for task in completed_task1 %}
                 <div class="card m-1">
                     <div class="card-body">
-                        This is the completed task.
+                        {{ task.task}}
+                        <span" style="position: relative; float: right;">
+                        <a href="{% url 'mark_as_undone' task.id %}"class="btn btn-outline-warning"><i class="fa fa-times"></i> Mark as UnDone</a>
+                        <a href="{% url 'delete' task.id %}" class="btn btn-outline-danger"><i class="fa fa-trash"></i> Delete</a>
+
+                    </span>
                     </div>
+                    </span>
                 </div>
+                {% endfor %} 
             </div>
         </div>
         <div class="row">
